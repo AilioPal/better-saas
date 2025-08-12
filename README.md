@@ -1,3 +1,7 @@
+
+  - Email: admin@example.com
+  - Password: mySecurePassword123
+
 # Better SaaS
 
 [中文版 README](README_zh.md) | English

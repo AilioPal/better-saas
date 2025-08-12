@@ -6,7 +6,7 @@ export const appConfig: AppConfig = {
     name: 'Better-SaaS',
     version: '0.1.0',
     description: 'A better SaaS application template',
-    url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+    url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:2999',
     domain: 'better-saas.com',
   },
 
@@ -27,7 +27,7 @@ export const appConfig: AppConfig = {
     openGraph: {
       type: 'website',
       locale: 'en_US',
-      url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+      url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:2999',
       siteName: 'Better-SaaS',
     },
     twitter: {

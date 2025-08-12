@@ -58,30 +58,87 @@ function createEdgeLogger(prefix = ''): SimpleLogger {
   };
 }
 
-let logger: SimpleLogger;
+let logger: SimpleLogger | null = null;
 
-if (isEdgeRuntime) {
-  // Use simple logger for Edge Runtime
-  logger = createEdgeLogger();
-} else {
-  // Use pino in Node.js environment
-  const pino = require('pino');
-  
-  logger = pino({
-    level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
-    ...(process.env.NODE_ENV === 'production' && {
-      formatters: {
-        level: (label: string) => {
-          return { level: label };
+// Initialize logger based on runtime
+async function initializeLogger(): Promise<SimpleLogger> {
+  if (isEdgeRuntime) {
+    // Use simple logger for Edge Runtime
+    return createEdgeLogger();
+  } else {
+    // Use pino in Node.js environment with dynamic import
+    const { default: pino } = await import('pino');
+    
+    return pino({
+      level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
+      ...(process.env.NODE_ENV === 'production' && {
+        formatters: {
+          level: (label: string) => {
+            return { level: label };
+          },
         },
-      },
-      timestamp: pino.stdTimeFunctions.isoTime,
-    }),
-  });
+        timestamp: pino.stdTimeFunctions.isoTime,
+      }),
+    });
+  }
 }
 
+// Create a proxy logger that initializes on first use
+const loggerProxy = new Proxy({} as SimpleLogger, {
+  get(target, prop) {
+    if (!logger) {
+      // For synchronous initialization in edge runtime
+      if (isEdgeRuntime) {
+        logger = createEdgeLogger();
+      } else {
+        // Return a function that logs after initialization
+        return (...args: unknown[]) => {
+          initializeLogger().then(l => {
+            logger = l;
+            const method = l[prop as keyof SimpleLogger];
+            if (typeof method === 'function') {
+              method.apply(l, args);
+            }
+          });
+        };
+      }
+    }
+    
+    return logger[prop as keyof SimpleLogger];
+  }
+});
+
 export const createChildLogger = (name: string) => {
+  if (!logger && isEdgeRuntime) {
+    logger = createEdgeLogger();
+  }
+  
+  if (!logger) {
+    // Return a proxy that will initialize on first use
+    return new Proxy({} as SimpleLogger, {
+      get(target, prop) {
+        return (...args: unknown[]) => {
+          initializeLogger().then(l => {
+            logger = l;
+            const child = l.child({ service: name });
+            const method = child[prop as keyof SimpleLogger];
+            if (typeof method === 'function') {
+              method.apply(child, args);
+            }
+          });
+        };
+      }
+    });
+  }
+  
   return logger.child({ service: name });
 };
 
-export default logger;
+// Initialize logger immediately if possible
+if (!isEdgeRuntime) {
+  initializeLogger().then(l => {
+    logger = l;
+  });
+}
+
+export default loggerProxy;

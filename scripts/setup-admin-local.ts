@@ -1,8 +1,8 @@
 #!/usr/bin/env tsx
 
 /**
- * setup admin script
- * example: pnpm tsx scripts/setup-admin.ts admin@example.com
+ * setup admin script for local PostgreSQL
+ * example: pnpm tsx scripts/setup-admin-local.ts admin@example.com
  */
 
 // Load environment variables from .env file
@@ -19,22 +19,24 @@ config({ path: resolve(__dirname, '../.env') });
 
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/node-postgres';
-import { Pool } from 'pg';
-import * as schema from '../src/server/db/schema';
+import pg from 'pg';
+import { user } from '../src/server/db/schema';
 import { createChildLogger } from '../src/lib/logger/logger';
 
 const setupAdminLogger = createChildLogger('setup-admin');
 
-// Create database connection
+// Create database connection for local PostgreSQL
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
   console.error('❌ Error: DATABASE_URL is not set');
   process.exit(1);
 }
+
+const { Pool } = pg;
 const pool = new Pool({
   connectionString: databaseUrl,
 });
-const db = drizzle(pool, { schema });
+const db = drizzle(pool);
 
 function getAdminEmails(): string[] {
   const adminEmails = process.env.ADMIN_EMAILS || '';
@@ -60,21 +62,15 @@ async function setupAdmin(email: string) {
 
     // find user
     setupAdminLogger.info(`🔍 find user: ${email}`);
-    let existingUser;
-    try {
-      existingUser = await db
-        .select()
-        .from(schema.user)
-        .where(eq(schema.user.email, email))
-        .limit(1);
-    } catch (dbError) {
-      setupAdminLogger.error('❌ Database query error:', dbError);
-      throw dbError;
-    }
+    const existingUser = await db
+      .select()
+      .from(user)
+      .where(eq(user.email, email))
+      .limit(1);
 
     if (existingUser.length === 0) {
-      console.error('❌ error: user not found');
-      console.log('please ensure the user has registered an account');
+      setupAdminLogger.error('❌ error: user not found');
+      setupAdminLogger.info('please ensure the user has registered an account');
       process.exit(1);
     }
 
@@ -93,23 +89,22 @@ async function setupAdmin(email: string) {
     // update user role to admin
     setupAdminLogger.info('🔄 set user to admin...');
     await db
-      .update(schema.user)
+      .update(user)
       .set({ 
         role: 'admin',
         updatedAt: new Date()
       })
-      .where(eq(schema.user.email, email));
+      .where(eq(user.email, email));
 
     setupAdminLogger.info('✅ success set admin');
     setupAdminLogger.info(`${email} is now an admin`);
 
   } catch (error) {
     console.error('❌ error: failed to set admin:', error);
-    if (error instanceof Error) {
-      console.error('Error message:', error.message);
-      console.error('Error stack:', error.stack);
-    }
     process.exit(1);
+  } finally {
+    // Close the pool connection
+    await pool.end();
   }
 }
 
@@ -118,7 +113,7 @@ async function main() {
 
   if (!email) {
     setupAdminLogger.error('❌ error: please provide an email address');
-    setupAdminLogger.info('example: pnpm tsx scripts/setup-admin.ts admin@example.com');
+    setupAdminLogger.info('example: pnpm tsx scripts/setup-admin-local.ts admin@example.com');
     process.exit(1);
   }
 
@@ -129,13 +124,8 @@ async function main() {
     process.exit(1);
   }
 
-  try {
-    await setupAdmin(email);
-  } finally {
-    // Close database connection
-    await pool.end();
-  }
+  await setupAdmin(email);
   process.exit(0);
 }
 
-main().catch(console.error); 
+main().catch(console.error);
