@@ -1,0 +1,101 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database (Development only)
+  postgres:
+    image: postgres:16-alpine
+    container_name: better-saas-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DATABASE_USER:-postgres}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-postgres}
+      POSTGRES_DB: ${DATABASE_NAME:-better_saas}
+    ports:
+      - "${DATABASE_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - better-saas-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - dev
+
+  # Development Application
+  app-dev:
+    build:
+      context: .
+      dockerfile: ./infra/docker/better-saas/Dockerfile.dev
+    container_name: better-saas-app-dev
+    restart: unless-stopped
+    ports:
+      - "2999:2999"
+      - "9229:9229"
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://${DATABASE_USER:-postgres}:${DATABASE_PASSWORD:-postgres}@postgres:5432/${DATABASE_NAME:-better_saas}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:2999}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:2999}
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - better-saas-network
+    profiles:
+      - dev
+
+  # Production Application (uses external managed database)
+  app-prod:
+    build:
+      context: .
+      dockerfile: ./infra/docker/better-saas/Dockerfile.prod
+    container_name: better-saas-app-prod
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: ${DATABASE_URL}  # External managed database URL
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+    networks:
+      - better-saas-network
+    profiles:
+      - prod
+
+  # Default Application (flexible - can use local or external DB)
+  app:
+    build:
+      context: .
+      dockerfile: ./infra/docker/better-saas/Dockerfile
+    container_name: better-saas-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/better_saas}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+    networks:
+      - better-saas-network
+    profiles:
+      - default
+
+networks:
+  better-saas-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
