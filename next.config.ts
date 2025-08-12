@@ -9,9 +9,18 @@ import './src/env';
 
 const withNextIntl = createNextIntlPlugin();
 
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
+// Only load bundle analyzer when explicitly requested
+let withBundleAnalyzer = (config: any) => config;
+if (process.env.ANALYZE === 'true') {
+  try {
+    withBundleAnalyzer = require('@next/bundle-analyzer')({
+      enabled: true,
+    });
+  } catch (e) {
+    // Bundle analyzer not available (e.g., in production), use pass-through
+    console.log('Bundle analyzer not available, skipping...');
+  }
+}
 
 const config: NextConfig = {
   devIndicators: false,

@@ -3,13 +3,11 @@
     # Email for Let's Encrypt registration
     email admin@ailiopal.com
     
-    # Automatic HTTPS configuration
-    # This is the default, but explicitly set for clarity
-    auto_https on
-    
     # ACME CA server (using Let's Encrypt production)
     # For staging/testing, use: https://acme-staging-v02.api.letsencrypt.org/directory
     acme_ca https://acme-v02.api.letsencrypt.org/directory
+    
+    # Note: auto_https is enabled by default when a domain is specified
 }
 
 code.ailiopal.com {
