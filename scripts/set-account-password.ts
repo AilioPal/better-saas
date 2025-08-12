@@ -1,10 +1,10 @@
 #!/usr/bin/env tsx
 
-import { config } from 'dotenv';
-import { resolve, dirname } from 'node:path';
+import { createHash, pbkdf2, randomBytes } from 'crypto';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createHash, randomBytes, pbkdf2 } from 'crypto';
 import { promisify } from 'util';
+import { config } from 'dotenv';
 
 const pbkdf2Async = promisify(pbkdf2);
 
@@ -13,8 +13,8 @@ const __dirname = dirname(__filename);
 
 config({ path: resolve(__dirname, '../.env') });
 
-import { drizzle } from 'drizzle-orm/node-postgres';
 import { eq } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/node-postgres';
 import pg from 'pg';
 import { account } from '../src/server/db/schema';
 
@@ -41,10 +41,11 @@ async function setAccountPassword(userId: string, plainPassword: string) {
     const hashedPassword = `pbkdf2:${salt}:${iterations}:${hash.toString('hex')}`;
 
     // Update the account with the hashed password
-    await db.update(account)
-      .set({ 
+    await db
+      .update(account)
+      .set({
         password: hashedPassword,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       })
       .where(eq(account.userId, userId));
 

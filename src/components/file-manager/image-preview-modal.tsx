@@ -4,9 +4,9 @@ import { Button } from '@/components/ui/button';
 import type { FileInfo } from '@/lib/files/file-service';
 import { cn } from '@/lib/utils';
 import { Download, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useEffect } from 'react';
-import { useTranslations } from 'next-intl';
 
 interface ImagePreviewModalProps {
   file: FileInfo | null;

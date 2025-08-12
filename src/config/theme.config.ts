@@ -1,12 +1,12 @@
-import type { ThemeConfig } from "@/types";
+import type { ThemeConfig } from '@/types';
 
 export const themeConfig: ThemeConfig = {
   // Default theme
   defaultTheme: 'system',
-  
+
   // Available themes
   themes: ['light', 'dark', 'system'] as const,
-  
+
   // Color palette
   colors: {
     primary: {
@@ -117,8 +117,24 @@ export const themeConfig: ThemeConfig = {
 
   // Font families
   fonts: {
-    sans: ['var(--font-geist-sans)', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-    mono: ['var(--font-geist-mono)', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+    sans: [
+      'var(--font-geist-sans)',
+      'system-ui',
+      '-apple-system',
+      'BlinkMacSystemFont',
+      'Segoe UI',
+      'Roboto',
+      'sans-serif',
+    ],
+    mono: [
+      'var(--font-geist-mono)',
+      'ui-monospace',
+      'SFMono-Regular',
+      'Menlo',
+      'Monaco',
+      'Consolas',
+      'monospace',
+    ],
     serif: ['ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
   },
 
@@ -184,4 +200,4 @@ export const themeConfig: ThemeConfig = {
     tooltip: 1070,
     toast: 1080,
   },
-}; 
+};

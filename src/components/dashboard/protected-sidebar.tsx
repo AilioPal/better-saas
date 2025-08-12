@@ -5,20 +5,20 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import type { ProtectedSidebarProps } from '@/types';
-import { 
-  ChevronDown, 
-  ChevronLeft, 
-  ChevronRight, 
-  Menu,
-  Users,
+import {
   Bell,
-  Files,
-  PenTool,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   CreditCard,
-  Shield,
+  Files,
   Home,
+  LayoutDashboard,
+  Menu,
+  PenTool,
   Settings,
-  LayoutDashboard
+  Shield,
+  Users,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';

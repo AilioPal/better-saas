@@ -1,8 +1,8 @@
 #!/usr/bin/env tsx
 
-import { config } from 'dotenv';
-import { resolve, dirname } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { config } from 'dotenv';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -23,7 +23,7 @@ async function checkUsers() {
   try {
     const users = await db.select().from(user).limit(10);
     console.log(`Total users found: ${users.length}`);
-    users.forEach(u => {
+    users.forEach((u) => {
       console.log(`- ${u.email} (role: ${u.role})`);
     });
   } catch (error) {

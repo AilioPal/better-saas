@@ -3,8 +3,8 @@
  * Uses Jimp instead of sharp, supports Vercel Serverless Functions, Edge Functions and Cloudflare Workers
  */
 
-import Jimp from 'jimp';
 import { appConfig } from '@/config/app.config';
+import Jimp from 'jimp';
 
 export interface ImageMetadata {
   width: number;
@@ -18,7 +18,9 @@ async function decodeImage(buffer: Buffer): Promise<Jimp> {
   try {
     return await Jimp.read(buffer);
   } catch (error) {
-    throw new Error(`Failed to decode image: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    throw new Error(
+      `Failed to decode image: ${error instanceof Error ? error.message : 'Unknown error'}`
+    );
   }
 }
 
@@ -39,7 +41,9 @@ export async function generateThumbnail(buffer: Buffer): Promise<Buffer> {
 
     return thumbnailBuffer;
   } catch (error) {
-    throw new Error(`Failed to generate thumbnail: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    throw new Error(
+      `Failed to generate thumbnail: ${error instanceof Error ? error.message : 'Unknown error'}`
+    );
   }
 }
 
@@ -57,7 +61,9 @@ export async function getImageMetadata(buffer: Buffer): Promise<ImageMetadata> {
       height: image.getHeight(),
     };
   } catch (error) {
-    throw new Error(`Failed to get image metadata: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    throw new Error(
+      `Failed to get image metadata: ${error instanceof Error ? error.message : 'Unknown error'}`
+    );
   }
 }
 
@@ -69,7 +75,9 @@ export function validateImageFile(file: File): { valid: boolean; error?: string 
   const { allowedTypes, maxFileSize } = appConfig.upload;
 
   if (!allowedTypes.includes(file.type)) {
-    const supportedFormats = allowedTypes.map(type => type.replace('image/', '').toUpperCase()).join(', ');
+    const supportedFormats = allowedTypes
+      .map((type) => type.replace('image/', '').toUpperCase())
+      .join(', ');
     return { valid: false, error: `Only ${supportedFormats} image formats are supported` };
   }
 

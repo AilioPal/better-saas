@@ -1,17 +1,17 @@
 #!/usr/bin/env tsx
 
-import { config } from 'dotenv';
-import { resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { randomBytes } from 'crypto';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { config } from 'dotenv';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 config({ path: resolve(__dirname, '../.env') });
 
-import { drizzle } from 'drizzle-orm/node-postgres';
 import { eq } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/node-postgres';
 import pg from 'pg';
 import { user } from '../src/server/db/schema';
 

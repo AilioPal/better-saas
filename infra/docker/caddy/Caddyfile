@@ -1,0 +1,71 @@
+# Global options
+{
+    # Email for Let's Encrypt registration
+    email admin@ailiopal.com
+    
+    # Automatic HTTPS configuration
+    # This is the default, but explicitly set for clarity
+    auto_https on
+    
+    # ACME CA server (using Let's Encrypt production)
+    # For staging/testing, use: https://acme-staging-v02.api.letsencrypt.org/directory
+    acme_ca https://acme-v02.api.letsencrypt.org/directory
+}
+
+code.ailiopal.com {
+    # TLS configuration with Let's Encrypt
+    tls {
+        # Protocols - use modern TLS versions only
+        protocols tls1.2 tls1.3
+        
+        # Cipher suites - use secure ciphers
+        ciphers TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256 TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+    }
+    
+    # Reverse proxy to Next.js application
+    reverse_proxy app-prod:3000
+    
+    # Enable compression
+    encode gzip zstd
+    
+    # Security headers
+    header {
+        # Prevent clickjacking
+        X-Frame-Options DENY
+        
+        # Prevent MIME type sniffing
+        X-Content-Type-Options nosniff
+        
+        # Enable XSS protection
+        X-XSS-Protection "1; mode=block"
+        
+        # Control referrer information
+        Referrer-Policy strict-origin-when-cross-origin
+        
+        # Permissions policy
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        
+        # HSTS - enforce HTTPS for 1 year
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    }
+    
+    # Health check endpoint for monitoring
+    handle /health {
+        respond "OK" 200
+    }
+    
+    # Logging
+    log {
+        output stdout
+        format json
+        level INFO
+    }
+}
+
+# Redirect www to non-www
+www.code.ailiopal.com {
+    redir https://code.ailiopal.com{uri} permanent
+}
+
+# Handle HTTP and redirect to HTTPS (automatic by default)
+# Caddy automatically redirects HTTP to HTTPS when a domain is specified

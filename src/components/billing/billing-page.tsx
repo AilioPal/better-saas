@@ -1,17 +1,17 @@
 'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { SubscriptionCard } from '@/components/payment/subscription-card';
-import { getBillingInfo } from '@/server/actions/payment/get-billing-info';
-import type { BillingInfo } from '@/server/actions/payment/get-billing-info';
-import { useEffect, useState, useCallback } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ErrorLogger } from '@/lib/logger/logger-utils';
+import { getBillingInfo } from '@/server/actions/payment/get-billing-info';
+import type { BillingInfo } from '@/server/actions/payment/get-billing-info';
+import { syncSingleSubscription } from '@/server/actions/payment/sync-subscription-periods';
 import { Calendar, CreditCard, RefreshCw } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { ErrorLogger } from '@/lib/logger/logger-utils';
-import { syncSingleSubscription } from '@/server/actions/payment/sync-subscription-periods';
 
 const billingErrorLogger = new ErrorLogger('billing-page');
 
@@ -266,18 +266,18 @@ export function BillingPage() {
                         {getStatusText(payment.status)}
                       </Badge>
                     </div>
-                    <div className='flex items-center gap-2 text-muted-foreground text-sm'>
+                    <div className="flex items-center gap-2 text-muted-foreground text-sm">
                       <Calendar className="h-4 w-4" />
                       <span>{formatDate(payment.createdAt)}</span>
                     </div>
                     {payment.interval && (
-                      <div className='text-muted-foreground text-sm'>
+                      <div className="text-muted-foreground text-sm">
                         计费周期：{payment.interval === 'month' ? '月付' : '年付'}
                       </div>
                     )}
                   </div>
                   <div className="text-right">
-                    <div className='text-muted-foreground text-sm'>价格ID</div>
+                    <div className="text-muted-foreground text-sm">价格ID</div>
                     <div className="font-mono text-sm">{payment.priceId}</div>
                   </div>
                 </div>

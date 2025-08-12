@@ -1,11 +1,11 @@
 'use client';
 
-import { Navbar } from './navbar';
 import { useNavbar } from '@/hooks/use-navbar';
+import { Navbar } from './navbar';
 
 export function NavbarWrapper() {
   const navbarData = useNavbar();
-  
+
   return (
     <Navbar
       logo={navbarData.logo}
@@ -18,4 +18,4 @@ export function NavbarWrapper() {
       onPricingClick={navbarData.handlePricingClick}
     />
   );
-} 
+}

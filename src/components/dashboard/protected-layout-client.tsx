@@ -1,16 +1,9 @@
 'use client';
 
-import { ProtectedContainer } from '@/components/dashboard/protected-container';
 import { useIsAdmin } from '@/components/auth/permission-provider';
+import { ProtectedContainer } from '@/components/dashboard/protected-container';
 import type { SidebarGroup } from '@/types';
-import {
-  Bell,
-  CreditCard,
-  Files,
-  Settings,
-  Shield,
-  Users,
-} from 'lucide-react';
+import { Bell, CreditCard, Files, Settings, Shield, Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';

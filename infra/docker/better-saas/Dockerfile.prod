@@ -13,6 +13,12 @@ WORKDIR /app
 # Copy package files
 COPY package.json pnpm-lock.yaml ./
 
+# Copy fumadocs config file (required for postinstall script)
+COPY source.config.ts ./
+
+# Create content directories structure (required by fumadocs)
+RUN mkdir -p src/content/docs src/content/blog
+
 # Install all dependencies (needed for build)
 RUN pnpm install --frozen-lockfile
 

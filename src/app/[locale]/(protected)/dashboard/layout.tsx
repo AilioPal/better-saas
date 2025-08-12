@@ -1,8 +1,8 @@
-import type { ReactNode } from 'react';
 import { AuthGuard } from '@/components/auth-guard';
+import PermissionWrapper from '@/components/auth/permission-wrapper';
 import { ProtectedLayoutClient } from '@/components/dashboard/protected-layout-client';
 import { LoadingSkeleton } from '@/components/loading-skeleton';
-import PermissionWrapper from '@/components/auth/permission-wrapper';
+import type { ReactNode } from 'react';
 import { Suspense } from 'react';
 
 // Force dynamic rendering for all dashboard routes
@@ -30,4 +30,4 @@ export default function DashboardLayout({ children }: Props) {
       </AuthGuard>
     </Suspense>
   );
-} 
+}

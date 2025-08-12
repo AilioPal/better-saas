@@ -4,21 +4,21 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { ErrorLogger } from '@/lib/logger/logger-utils';
 import { cn } from '@/lib/utils';
-import { 
-  useAuthLoading, 
-  useAuthError, 
-  useIsAuthenticated,
-  useEmailSignup,
+import {
+  useAuthError,
+  useAuthLoading,
   useClearError,
+  useEmailSignup,
+  useIsAuthenticated,
+  useSetError,
   useSignInWithGithub,
   useSignInWithGoogle,
-  useSetError
 } from '@/store/auth-store';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
-import { ErrorLogger } from '@/lib/logger/logger-utils';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
 
 const signupErrorLogger = new ErrorLogger('signup-form');
 
@@ -26,7 +26,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'div'>)
   const router = useRouter();
   const searchParams = useSearchParams();
   const t = useTranslations('auth');
-  
+
   const isLoading = useAuthLoading();
   const error = useAuthError();
   const isAuthenticated = useIsAuthenticated();
@@ -36,13 +36,13 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'div'>)
   const signInWithGoogle = useSignInWithGoogle();
   const setError = useSetError();
 
-          // Form state
+  // Form state
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-      // Get callback URL
+  // Get callback URL
   const getRedirectUrl = useCallback(() => {
     const callbackUrl = searchParams.get('callbackUrl');
     return callbackUrl || '/settings/profile';
@@ -57,7 +57,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'div'>)
 
   const handleSocialLogin = async (provider: 'github' | 'google') => {
     try {
-      clearError();   
+      clearError();
       if (provider === 'github') {
         await signInWithGithub();
       } else {
@@ -71,12 +71,12 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'div'>)
     }
   };
 
-      // Email registration handling
+  // Email registration handling
   const handleEmailSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-          clearError(); // Clear previous errors
+    clearError(); // Clear previous errors
 
-          // Validate password match
+    // Validate password match
     if (password !== confirmPassword) {
       setError(t('passwordMismatch'));
       return;
@@ -118,7 +118,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'div'>)
                 </div>
               )}
 
-                              {/* Social login buttons */}
+              {/* Social login buttons */}
               <div className="flex flex-col gap-4">
                 <Button
                   type="button"
@@ -174,7 +174,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'div'>)
                 </span>
               </div>
 
-                              {/* Email password registration */}
+              {/* Email password registration */}
               <div className="grid gap-6">
                 <div className="grid gap-3">
                   <Label htmlFor="name">{t('name')}</Label>
@@ -256,8 +256,8 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'div'>)
         {t('termsAndPrivacy.prefix')}{' '}
         <a href="/terms" className="underline underline-offset-4 hover:text-primary">
           {t('termsOfService')}
-        </a>
-        {' '}{t('termsAndPrivacy.middle')}{' '}
+        </a>{' '}
+        {t('termsAndPrivacy.middle')}{' '}
         <a href="/privacy" className="underline underline-offset-4 hover:text-primary">
           {t('privacyPolicy')}
         </a>

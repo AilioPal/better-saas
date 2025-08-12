@@ -49,13 +49,16 @@ export interface AppConfig {
 export interface I18nConfig {
   locales: readonly string[];
   defaultLocale: string;
-  languages: Record<string, {
-    name: string;
-    nativeName: string;
-    flag: string;
-    dir: 'ltr' | 'rtl';
-    enabled: boolean;
-  }>;
+  languages: Record<
+    string,
+    {
+      name: string;
+      nativeName: string;
+      flag: string;
+      dir: 'ltr' | 'rtl';
+      enabled: boolean;
+    }
+  >;
   routing: {
     localePrefix: 'always' | 'as-needed' | 'never';
     localeDetection: boolean;
@@ -63,16 +66,22 @@ export interface I18nConfig {
   };
   namespaces: string[];
   fallbackLocale: string;
-  dateTimeFormats: Record<string, {
-    short: Intl.DateTimeFormatOptions;
-    medium: Intl.DateTimeFormatOptions;
-    long: Intl.DateTimeFormatOptions;
-  }>;
-  numberFormats: Record<string, {
-    currency: Intl.NumberFormatOptions;
-    decimal: Intl.NumberFormatOptions;
-    percent: Intl.NumberFormatOptions;
-  }>;
+  dateTimeFormats: Record<
+    string,
+    {
+      short: Intl.DateTimeFormatOptions;
+      medium: Intl.DateTimeFormatOptions;
+      long: Intl.DateTimeFormatOptions;
+    }
+  >;
+  numberFormats: Record<
+    string,
+    {
+      currency: Intl.NumberFormatOptions;
+      decimal: Intl.NumberFormatOptions;
+      percent: Intl.NumberFormatOptions;
+    }
+  >;
 }
 
 export interface FeaturesConfig {
@@ -276,7 +285,6 @@ export interface PaymentConfig {
   };
 }
 
-
 export interface SidebarItem {
   title: string;
   href: string;
@@ -348,4 +356,3 @@ declare module 'better-auth/types' {
     banExpires?: Date | null;
   }
 }
-

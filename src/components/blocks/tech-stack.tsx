@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { useTranslations } from 'next-intl';
 
 interface TechStackProps {
   heading?: string;
@@ -6,9 +6,7 @@ interface TechStackProps {
   badge?: string;
 }
 
-const TechStack = ({
-  heading = 'Build With Modern Stack',
-}: TechStackProps) => {
+const TechStack = ({ heading = 'Build With Modern Stack' }: TechStackProps) => {
   const t = useTranslations('techstack');
   const techLogos = [
     {

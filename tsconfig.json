@@ -32,5 +32,12 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.js", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "tests/**", "coverage/**", "playwright-report/**", "test-results/**", "scripts/**"]
+  "exclude": [
+    "node_modules",
+    "tests/**",
+    "coverage/**",
+    "playwright-report/**",
+    "test-results/**",
+    "scripts/**"
+  ]
 }

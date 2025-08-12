@@ -3,10 +3,10 @@ import type { PaymentConfig } from '@/types';
 export const paymentConfig: PaymentConfig = {
   // Payment provider
   provider: 'stripe',
-  
+
   // Base currency
   currency: 'usd',
-  
+
   // Stripe configuration
   stripe: {
     secretKey: process.env.STRIPE_SECRET_KEY || '',
@@ -73,7 +73,8 @@ export const paymentConfig: PaymentConfig = {
       yearlyPrice: 999, // $99 * 10 months (2 months free)
       interval: 'month',
       stripePriceIds: {
-        monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE_MONTHLY || 'price_enterprise_monthly',
+        monthly:
+          process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE_MONTHLY || 'price_enterprise_monthly',
         yearly: process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE_YEARLY || 'price_enterprise_yearly',
       },
       features: [
@@ -105,7 +106,8 @@ export const paymentConfig: PaymentConfig = {
 
   // Invoice configuration
   invoice: {
-    footer: 'Thank you for your business! If you have any questions, please contact our support team.',
+    footer:
+      'Thank you for your business! If you have any questions, please contact our support team.',
     logo: '/logo.png',
     supportEmail: 'support@better-saas.com',
   },
@@ -125,4 +127,4 @@ export const paymentConfig: PaymentConfig = {
     customerPortal: true,
     webhooks: true,
   },
-}; 
+};

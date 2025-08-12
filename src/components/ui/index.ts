@@ -8,17 +8,17 @@ export { Label } from './label';
 export { Separator } from './separator';
 
 // 卡片组件
-export { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
+export {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from './card';
 
 // 表单组件
 export { Checkbox } from './checkbox';
-export { 
+export {
   Select,
   SelectContent,
   SelectItem,
@@ -30,7 +30,7 @@ export { Switch } from './switch';
 // 反馈组件
 export { Badge } from './badge';
 export { Skeleton } from './skeleton';
-export { 
+export {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -43,14 +43,14 @@ export {
 } from './alert-dialog';
 
 // 布局组件
-export { 
+export {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from './accordion';
 export { ScrollArea } from './scroll-area';
-export { 
+export {
   Sheet,
   SheetContent,
   SheetDescription,
@@ -60,7 +60,7 @@ export {
 } from './sheet';
 
 // 导航组件
-export { 
+export {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
@@ -68,7 +68,7 @@ export {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from './navigation-menu';
-export { 
+export {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -78,7 +78,7 @@ export {
 } from './dropdown-menu';
 
 // 数据展示组件
-export { 
+export {
   Table,
   TableBody,
   TableCaption,
@@ -90,16 +90,16 @@ export {
 export { PaginationControls } from './pagination';
 
 // 头像组件
-export { 
+export {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from './avatar';
 
 // 提示组件
-export { 
+export {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from './tooltip'; 
+} from './tooltip';

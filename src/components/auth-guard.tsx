@@ -3,17 +3,17 @@
 import { LoadingSkeleton } from '@/components/loading-skeleton';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
-  useAuthLoading,
+import {
   useAuthError,
+  useAuthInitialized,
+  useAuthLoading,
   useIsAuthenticated,
-  useAuthInitialized, 
-  useRefreshSession 
+  useRefreshSession,
 } from '@/store/auth-store';
 import { AlertCircle, Loader2, Lock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { useEffect, useCallback } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect } from 'react';
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -68,9 +68,7 @@ export function AuthGuard({
         <Card className="w-full max-w-md">
           <CardContent className="flex flex-col items-center justify-center p-6">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            <p className="mt-4 text-muted-foreground text-sm">
-              {t('loading')}
-            </p>
+            <p className="mt-4 text-muted-foreground text-sm">{t('loading')}</p>
           </CardContent>
         </Card>
       </div>
@@ -117,9 +115,7 @@ export function AuthGuard({
               <Lock className="h-6 w-6 text-primary" />
             </div>
             <CardTitle>{t('accessDenied')}</CardTitle>
-            <CardDescription>
-              {t('loginRequired')}
-            </CardDescription>
+            <CardDescription>{t('loginRequired')}</CardDescription>
           </CardHeader>
           <CardContent>
             <Button

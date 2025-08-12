@@ -1,19 +1,19 @@
 #!/usr/bin/env tsx
 
-import { config } from 'dotenv';
-import { resolve, dirname } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { config } from 'dotenv';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 config({ path: resolve(__dirname, '../.env') });
 
-import { drizzle } from 'drizzle-orm/node-postgres';
+import { hashPassword } from 'better-auth/crypto';
 import { eq } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/node-postgres';
 import pg from 'pg';
 import { account } from '../src/server/db/schema';
-import { hashPassword } from 'better-auth/crypto';
 
 const { Pool } = pg;
 const pool = new Pool({
@@ -34,10 +34,11 @@ async function setPasswordWithBetterAuth(userId: string, plainPassword: string) 
     const hashedPassword = await hashPassword(plainPassword);
 
     // Update the account with the hashed password
-    await db.update(account)
-      .set({ 
+    await db
+      .update(account)
+      .set({
         password: hashedPassword,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       })
       .where(eq(account.userId, userId));
 

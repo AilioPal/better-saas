@@ -46,21 +46,19 @@ export function ProfileContent({
           toast.error('仅支持 JPEG 和 PNG 格式的图片');
           return;
         }
-        
+
         if (file.size > appConfig.upload.maxFileSize) {
           toast.error('文件大小不能超过 10MB');
           return;
         }
-        
+
         await handleUpdateAvatar(file);
       }
     };
     input.click();
   };
 
-  const handleSaveEmail = () => {
-    
-  };
+  const handleSaveEmail = () => {};
 
   return (
     <div className="space-y-6">
@@ -103,7 +101,7 @@ export function ProfileContent({
           </CardContent>
         </Card>
 
-                  {/* Language settings */}
+        {/* Language settings */}
         <Card>
           <CardHeader>
             <CardTitle>{t('language.title')}</CardTitle>
@@ -125,7 +123,7 @@ export function ProfileContent({
           </CardContent>
         </Card>
 
-                  {/* Name settings */}
+        {/* Name settings */}
         <Card>
           <CardHeader>
             <CardTitle>{t('name.title')}</CardTitle>
@@ -135,12 +133,12 @@ export function ProfileContent({
               <div className="flex-1">
                 <Input
                   value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                   placeholder={t('name.placeholder')}
                 />
               </div>
-              <Button 
-                onClick={handleUpdateName} 
+              <Button
+                onClick={handleUpdateName}
                 variant="outline"
                 disabled={isUpdatingName || !hasNameChanged}
               >
@@ -157,7 +155,7 @@ export function ProfileContent({
           </CardContent>
         </Card>
 
-                  {/* Email settings */}
+        {/* Email settings */}
         <Card>
           <CardHeader>
             <CardTitle>{t('email.title')}</CardTitle>
@@ -169,7 +167,7 @@ export function ProfileContent({
                 <Input
                   type="email"
                   value={formData.email}
-                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
                   placeholder={t('email.placeholder')}
                   disabled
                 />
@@ -178,9 +176,7 @@ export function ProfileContent({
                 {t('save')}
               </Button>
             </div>
-            <p className="mt-2 text-muted-foreground text-sm">
-              邮箱更改需要验证，此功能正在开发中
-            </p>
+            <p className="mt-2 text-muted-foreground text-sm">邮箱更改需要验证，此功能正在开发中</p>
           </CardContent>
         </Card>
       </div>

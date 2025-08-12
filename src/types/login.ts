@@ -26,4 +26,4 @@ export interface UseLoginReturn {
   handleSocialLogin: (provider: 'github' | 'google') => void;
   handleClearError: () => void;
   getRedirectUrl: () => string;
-} 
+}

@@ -1,18 +1,18 @@
 #!/usr/bin/env tsx
 
-import { config } from 'dotenv';
-import { resolve, dirname } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { config } from 'dotenv';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 config({ path: resolve(__dirname, '../.env') });
 
-import { drizzle } from 'drizzle-orm/node-postgres';
 import { eq } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/node-postgres';
 import pg from 'pg';
-import { user, account } from '../src/server/db/schema';
+import { account, user } from '../src/server/db/schema';
 
 const { Pool } = pg;
 const pool = new Pool({
@@ -24,7 +24,7 @@ async function checkUserDetails(userId: string) {
   try {
     // Get user details
     const users = await db.select().from(user).where(eq(user.id, userId));
-    
+
     if (users.length === 0) {
       console.log(`❌ No user found with ID: ${userId}`);
       return;
@@ -40,7 +40,7 @@ async function checkUserDetails(userId: string) {
 
     // Get account details
     const accounts = await db.select().from(account).where(eq(account.userId, userId));
-    
+
     if (accounts.length > 0) {
       console.log('\n🔐 Account Details:');
       accounts.forEach((acc, index) => {
@@ -57,20 +57,19 @@ async function checkUserDetails(userId: string) {
     // Also check what user has the email admin@example.com
     console.log('\n🔍 Checking for admin@example.com...');
     const adminUsers = await db.select().from(user).where(eq(user.email, 'admin@example.com'));
-    
+
     if (adminUsers.length > 0) {
       const adminUser = adminUsers[0];
       console.log(`   Found user with email admin@example.com:`);
       console.log(`   ID: ${adminUser.id}`);
       console.log(`   Name: ${adminUser.name}`);
-      
+
       // Check if this user has an account
       const adminAccounts = await db.select().from(account).where(eq(account.userId, adminUser.id));
       console.log(`   Has account record: ${adminAccounts.length > 0 ? 'Yes' : 'No'}`);
     } else {
       console.log('   No user found with email admin@example.com');
     }
-
   } catch (error) {
     console.error('Error checking user details:', error);
   } finally {

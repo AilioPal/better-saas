@@ -3,15 +3,15 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PaginationControls } from '@/components/ui/pagination';
+import { useAppConfig } from '@/hooks/use-config';
 import { useFiles } from '@/hooks/use-files';
 import type { FileInfo } from '@/lib/files/file-service';
 import { Search, Upload } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { FileTable } from './file-table';
 import { FileUpload } from './file-upload';
 import { ImagePreviewModal } from './image-preview-modal';
-import { useAppConfig } from '@/hooks/use-config';
-import { useTranslations } from 'next-intl';
 
 export function FileManager() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -96,7 +96,6 @@ export function FileManager() {
       {/* Pagination */}
       {pagination && pagination.total > 0 && (
         <div className="flex items-center justify-between">
-          
           <PaginationControls
             currentPage={pagination.page}
             totalPages={Math.ceil(pagination.total / pagination.limit)}

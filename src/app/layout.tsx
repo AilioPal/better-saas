@@ -46,14 +46,29 @@ const geist = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
   display: 'swap',
-  fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+  fallback: [
+    'system-ui',
+    '-apple-system',
+    'BlinkMacSystemFont',
+    'Segoe UI',
+    'Roboto',
+    'sans-serif',
+  ],
 });
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
   display: 'swap',
-  fallback: ['ui-monospace', 'SFMono-Regular', 'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+  fallback: [
+    'ui-monospace',
+    'SFMono-Regular',
+    'SF Mono',
+    'Menlo',
+    'Monaco',
+    'Consolas',
+    'monospace',
+  ],
 });
 
 export default async function RootLayout({

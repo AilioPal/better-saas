@@ -115,4 +115,4 @@ export {
   Smartphone,
   Tablet,
   Camera,
-} from 'lucide-react'; 
+} from 'lucide-react';

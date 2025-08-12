@@ -12,12 +12,12 @@ export interface InvoiceWithSubscription extends StripeTypes.Invoice {
 }
 
 // 扩展支付状态类型，包含 Stripe 可能的所有状态
-export type ExtendedPaymentStatus = 
-  | 'active' 
-  | 'canceled' 
-  | 'past_due' 
-  | 'trialing' 
-  | 'incomplete' 
+export type ExtendedPaymentStatus =
+  | 'active'
+  | 'canceled'
+  | 'past_due'
+  | 'trialing'
+  | 'incomplete'
   | 'incomplete_expired'
   | 'unpaid'
-  | 'paused'; 
+  | 'paused';

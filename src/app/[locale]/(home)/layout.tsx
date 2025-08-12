@@ -14,4 +14,4 @@ export default function MarketingLayout({ children }: Props) {
       <Footer />
     </div>
   );
-} 
+}

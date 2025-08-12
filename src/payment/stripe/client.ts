@@ -1,5 +1,5 @@
-import { Stripe } from 'stripe';
 import { env } from '@/env';
+import { Stripe } from 'stripe';
 import { paymentConfig } from '../../config/payment.config';
 
 // Stripe configuration
@@ -13,4 +13,4 @@ export const stripeConfig = {
 export const stripe = new Stripe(stripeConfig.secretKey, {
   apiVersion: stripeConfig.apiVersion,
   typescript: true,
-}); 
+});

@@ -2,12 +2,12 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useAppConfig } from '@/hooks/use-config';
 import { cn } from '@/lib/utils';
 import { FileImage, Upload, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useAppConfig } from '@/hooks/use-config';
-import { useTranslations } from 'next-intl';
 
 interface FileUploadProps {
   onUpload: (files: File[]) => void;
@@ -18,7 +18,7 @@ interface FileUploadProps {
 export function FileUpload({ onUpload, loading = false, className }: FileUploadProps) {
   const appConfig = useAppConfig();
   const t = useTranslations('fileManager');
-  
+
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       if (acceptedFiles.length > 0) {
@@ -71,7 +71,9 @@ export function FileUpload({ onUpload, loading = false, className }: FileUploadP
                       : t('dragDropText')}
                 </h3>
                 <p className="text-muted-foreground text-sm">
-                  {t('supportedFormats', { maxSize: Math.round(appConfig.upload.maxFileSize / (1024 * 1024)) })}
+                  {t('supportedFormats', {
+                    maxSize: Math.round(appConfig.upload.maxFileSize / (1024 * 1024)),
+                  })}
                 </p>
               </div>
 

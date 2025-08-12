@@ -1,6 +1,6 @@
 import { Star } from 'lucide-react';
-import React from 'react';
 import { useTranslations } from 'next-intl';
+import React from 'react';
 
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -21,12 +21,7 @@ interface HeroProps {
   };
 }
 
-const Hero = ({
-  heading,
-  description,
-  button,
-  reviews,
-}: HeroProps) => {
+const Hero = ({ heading, description, button, reviews }: HeroProps) => {
   const t = useTranslations('hero');
 
   // 使用i18n翻译或传入的props

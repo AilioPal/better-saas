@@ -4,12 +4,12 @@ import type { Stripe as StripeTypes } from 'stripe';
 export type PaymentType = 'one_time' | 'subscription';
 
 // Payment status
-export type PaymentStatus = 
-  | 'active' 
-  | 'canceled' 
-  | 'past_due' 
-  | 'trialing' 
-  | 'incomplete' 
+export type PaymentStatus =
+  | 'active'
+  | 'canceled'
+  | 'past_due'
+  | 'trialing'
+  | 'incomplete'
   | 'incomplete_expired'
   | 'unpaid'
   | 'paused';
@@ -18,11 +18,11 @@ export type PaymentStatus =
 export type PaymentInterval = 'month' | 'year' | null;
 
 // Payment event type
-export type PaymentEventType = 
-  | 'created' 
-  | 'succeeded' 
-  | 'failed' 
-  | 'canceled' 
+export type PaymentEventType =
+  | 'created'
+  | 'succeeded'
+  | 'failed'
+  | 'canceled'
   | 'updated'
   | 'invoice.payment_succeeded'
   | 'invoice.payment_failed'
@@ -119,7 +119,10 @@ export interface PaymentRecord {
 export interface PaymentProvider {
   createPayment(params: CreatePaymentParams): Promise<PaymentResult>;
   createSubscription(params: CreateSubscriptionParams): Promise<SubscriptionResult>;
-  updateSubscription(subscriptionId: string, params: UpdateSubscriptionParams): Promise<SubscriptionResult>;
+  updateSubscription(
+    subscriptionId: string,
+    params: UpdateSubscriptionParams
+  ): Promise<SubscriptionResult>;
   cancelSubscription(subscriptionId: string): Promise<boolean>;
   getSubscription(subscriptionId: string): Promise<SubscriptionResult | null>;
   getPaymentStatus(paymentId: string): Promise<PaymentStatus>;
@@ -185,4 +188,4 @@ export interface PlanConfig {
   features: string[];
   popular?: boolean;
   metadata?: Record<string, string>;
-} 
+}

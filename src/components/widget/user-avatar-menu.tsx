@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useAuthLoading, useIsAuthenticated, useUser, useSignOut } from '@/store/auth-store';
+import { useAuthLoading, useIsAuthenticated, useSignOut, useUser } from '@/store/auth-store';
 import { Home, LogOut, Settings, Shield, User } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';

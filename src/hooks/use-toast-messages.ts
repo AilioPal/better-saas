@@ -22,4 +22,4 @@ export function useToastMessages() {
       nameNotChanged: () => toast.info(t('info.nameNotChanged')),
     },
   };
-} 
+}

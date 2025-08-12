@@ -1,17 +1,17 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { 
-  useAuthLoading, 
-  useAuthError, 
-  useIsAuthenticated,
-  useEmailLogin,
+import { ErrorLogger } from '@/lib/logger/logger-utils';
+import {
+  useAuthError,
+  useAuthLoading,
   useClearError,
+  useEmailLogin,
+  useIsAuthenticated,
   useSignInWithGithub,
-  useSignInWithGoogle
+  useSignInWithGoogle,
 } from '@/store/auth-store';
 import type { LoginFormData, UseLoginReturn } from '@/types/login';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
 import { useToastMessages } from './use-toast-messages';
-import { ErrorLogger } from '@/lib/logger/logger-utils';
 
 const loginErrorLogger = new ErrorLogger('use-login');
 
@@ -19,7 +19,7 @@ export function useLogin(): UseLoginReturn {
   const router = useRouter();
   const searchParams = useSearchParams();
   const toastMessages = useToastMessages();
-  
+
   const isLoading = useAuthLoading();
   const error = useAuthError();
   const isAuthenticated = useIsAuthenticated();
@@ -50,7 +50,7 @@ export function useLogin(): UseLoginReturn {
   // Handle social login
   const handleSocialLogin = async (provider: 'github' | 'google') => {
     try {
-      clearError();   
+      clearError();
       if (provider === 'github') {
         await signInWithGithub();
       } else {
@@ -68,7 +68,7 @@ export function useLogin(): UseLoginReturn {
   // Handle email login
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    clearError(); 
+    clearError();
 
     const result = await emailLogin(formData.email, formData.password);
     if (result.success) {
@@ -96,4 +96,4 @@ export function useLogin(): UseLoginReturn {
     handleClearError,
     getRedirectUrl,
   };
-} 
+}

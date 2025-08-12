@@ -1,9 +1,9 @@
+import { ErrorLogger } from '@/lib/logger/logger-utils';
+import { type CreateFileData, fileRepository } from '@/server/db/repositories';
 import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl as createSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { generateThumbnail, getImageMetadata, validateImageFile } from './image-processor';
 import { R2_BUCKET_NAME, R2_PUBLIC_URL, r2Client } from './r2-client';
-import { fileRepository, type CreateFileData } from '@/server/db/repositories';
-import { ErrorLogger } from '@/lib/logger/logger-utils';
 
 const fileServiceErrorLogger = new ErrorLogger('file-service');
 
@@ -101,32 +101,32 @@ export async function getSignedUrl(r2Key: string, expiresIn = 3600): Promise<str
  * Complete file upload process (including database operations)
  */
 export async function uploadFile(file: File, userId: string): Promise<FileInfo> {
-      // Validate file
-    const validation = validateImageFile(file);
+  // Validate file
+  const validation = validateImageFile(file);
   if (!validation.valid) {
     throw new Error(validation.error);
   }
 
-      // Read file content
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+  // Read file content
+  const arrayBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
 
-      // Get image metadata
-    const { width, height } = await getImageMetadata(buffer);
+  // Get image metadata
+  const { width, height } = await getImageMetadata(buffer);
 
-      // Generate filename and path
-    const filename = generateUniqueFilename(file.name);
-    const r2Key = generateR2Key(filename);
-    const thumbnailKey = generateR2Key(filename, 'thumbnail');
+  // Generate filename and path
+  const filename = generateUniqueFilename(file.name);
+  const r2Key = generateR2Key(filename);
+  const thumbnailKey = generateR2Key(filename, 'thumbnail');
 
-      // Generate thumbnail
-    const thumbnailBuffer = await generateThumbnail(buffer);
+  // Generate thumbnail
+  const thumbnailBuffer = await generateThumbnail(buffer);
 
-      // Upload original image to R2
-    await uploadToR2(r2Key, buffer, file.type);
+  // Upload original image to R2
+  await uploadToR2(r2Key, buffer, file.type);
 
-      // Upload thumbnail to R2
-    await uploadToR2(thumbnailKey, thumbnailBuffer, 'image/jpeg');
+  // Upload thumbnail to R2
+  await uploadToR2(thumbnailKey, thumbnailBuffer, 'image/jpeg');
 
   // Save file info to database
   const fileData: CreateFileData = {
@@ -170,14 +170,14 @@ export async function deleteFile(fileId: string, userId?: string): Promise<boole
   try {
     // Delete file from R2
     await deleteFromR2(fileInfo.r2Key);
-    
+
     // Delete thumbnail
     if (fileInfo.thumbnailKey) {
       await deleteFromR2(fileInfo.thumbnailKey);
     }
 
     // Delete record from database
-    const deleted = userId 
+    const deleted = userId
       ? await fileRepository.deleteByUserId(userId, fileId)
       : await fileRepository.delete(fileId);
 
@@ -207,7 +207,7 @@ export async function getFileList(options: {
   if (userId) {
     const result = await fileRepository.findByUserId(userId, listOptions);
     return {
-      files: result.files.map(file => ({
+      files: result.files.map((file) => ({
         ...file,
         url: getFileUrl(file.r2Key),
         thumbnailUrl: file.thumbnailKey ? getFileUrl(file.thumbnailKey) : undefined,
@@ -219,10 +219,10 @@ export async function getFileList(options: {
       },
     };
   }
-  
+
   const result = await fileRepository.findAll(listOptions);
   return {
-    files: result.files.map(file => ({
+    files: result.files.map((file) => ({
       ...file,
       url: getFileUrl(file.r2Key),
       thumbnailUrl: file.thumbnailKey ? getFileUrl(file.thumbnailKey) : undefined,

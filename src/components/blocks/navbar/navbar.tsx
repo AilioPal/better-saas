@@ -19,10 +19,10 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import { LanguageSwitcher } from '@/components/widget/language-switcher';
 import { ThemeToggle } from '@/components/widget/theme-toggle';
 import { UserAvatarMenu } from '@/components/widget/user-avatar-menu';
+import type { MenuItem, NavbarProps } from '@/types/navbar';
 import { Book, Menu, Sunset, Trees, Zap } from 'lucide-react';
 import Link from 'next/link';
 import type { JSX } from 'react';
-import type { NavbarProps, MenuItem } from '@/types/navbar';
 
 function DesktopAuthDisplay({
   loginText,
@@ -124,7 +124,7 @@ const Navbar = ({
 
   const menuItems = menuWithIcons;
 
-      // Render desktop menu items
+  // Render desktop menu items
   const renderMenuItem = (item: MenuItem) => {
     if (item.items && item.items.length > 0) {
       return (

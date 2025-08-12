@@ -1,37 +1,41 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from '@/components/ui/table';
-import { 
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  Search, 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
+  type GetUsersOptions,
+  type UserListResponse,
+  getUsers,
+} from '@/server/actions/user-actions';
+import {
   ArrowUpDown,
   CheckCircle,
-  XCircle,
+  ChevronLeft,
+  ChevronRight,
   Crown,
-  User
+  Search,
+  User,
+  XCircle,
 } from 'lucide-react';
-import { getUsers, type UserListResponse, type GetUsersOptions } from '@/server/actions/user-actions';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 export function UserList() {
@@ -107,7 +111,11 @@ export function UserList() {
 
   const getUserInitials = (name: string | null, email: string) => {
     if (name) {
-      return name.split(' ').map(n => n[0]).join('').toUpperCase();
+      return name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase();
     }
     return email[0]?.toUpperCase() || 'U';
   };
@@ -144,17 +152,20 @@ export function UserList() {
           <div className="space-y-4">
             {/* Search and controls skeleton */}
             <div className="flex items-center justify-between">
-              <div className="h-10 w-64 bg-gray-200 rounded animate-pulse" />
+              <div className="h-10 w-64 animate-pulse rounded bg-gray-200" />
               <div className="flex items-center gap-2">
-                <div className="h-10 w-20 bg-gray-200 rounded animate-pulse" />
-                <div className="h-10 w-32 bg-gray-200 rounded animate-pulse" />
+                <div className="h-10 w-20 animate-pulse rounded bg-gray-200" />
+                <div className="h-10 w-32 animate-pulse rounded bg-gray-200" />
               </div>
             </div>
-            
+
             {/* Table skeleton */}
             <div className="space-y-2">
               {Array.from({ length: 5 }).map((_, i) => (
-                <div key={`skeleton-row-${Date.now()}-${i}`} className="h-16 bg-gray-200 rounded animate-pulse" />
+                <div
+                  key={`skeleton-row-${Date.now()}-${i}`}
+                  className="h-16 animate-pulse rounded bg-gray-200"
+                />
               ))}
             </div>
           </div>
@@ -173,7 +184,7 @@ export function UserList() {
           {/* Search and controls */}
           <div className="flex items-center justify-between">
             <div className="relative w-64">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 transform text-gray-400" />
               <Input
                 data-testid="user-search"
                 placeholder="搜索用户名或邮箱..."
@@ -182,9 +193,9 @@ export function UserList() {
                 className="pl-10"
               />
             </div>
-            
+
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-500">每页显示</span>
+              <span className="text-gray-500 text-sm">每页显示</span>
               <Select value={pageSize.toString()} onValueChange={handlePageSizeChange}>
                 <SelectTrigger className="w-20">
                   <SelectValue />
@@ -196,7 +207,7 @@ export function UserList() {
                   <SelectItem value="50">50</SelectItem>
                 </SelectContent>
               </Select>
-              <span className="text-sm text-gray-500">条记录</span>
+              <span className="text-gray-500 text-sm">条记录</span>
             </div>
           </div>
 
@@ -237,43 +248,40 @@ export function UserList() {
                       <div className="flex items-center gap-3">
                         <Avatar className="h-8 w-8">
                           <AvatarImage src={user.image || undefined} />
-                          <AvatarFallback>
-                            {getUserInitials(user.name, user.email)}
-                          </AvatarFallback>
+                          <AvatarFallback>{getUserInitials(user.name, user.email)}</AvatarFallback>
                         </Avatar>
                         <div>
-                          <div className="font-medium">
-                            {user.name || '未设置姓名'}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            ID: {user.id.slice(0, 8)}...
-                          </div>
+                          <div className="font-medium">{user.name || '未设置姓名'}</div>
+                          <div className="text-gray-500 text-sm">ID: {user.id.slice(0, 8)}...</div>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>
-                      <Badge className={`${getRoleColor(user.role)} flex items-center gap-1 w-fit`}>
+                      <Badge className={`${getRoleColor(user.role)} flex w-fit items-center gap-1`}>
                         {getRoleIcon(user.role)}
                         {user.role === 'admin' ? '管理员' : '用户'}
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-2" data-testid={`email-verified-${user.id}`}>
+                      <div
+                        className="flex items-center gap-2"
+                        data-testid={`email-verified-${user.id}`}
+                      >
                         {user.emailVerified ? (
                           <>
                             <CheckCircle className="h-4 w-4 text-green-500" />
-                            <span className="text-sm text-green-700">已验证</span>
+                            <span className="text-green-700 text-sm">已验证</span>
                           </>
                         ) : (
                           <>
                             <XCircle className="h-4 w-4 text-red-500" />
-                            <span className="text-sm text-red-700">未验证</span>
+                            <span className="text-red-700 text-sm">未验证</span>
                           </>
                         )}
                       </div>
                     </TableCell>
-                    <TableCell className="text-sm text-gray-500">
+                    <TableCell className="text-gray-500 text-sm">
                       {formatDate(user.createdAt)}
                     </TableCell>
                   </TableRow>
@@ -285,11 +293,11 @@ export function UserList() {
           {/* Pagination */}
           {data && data.totalPages > 1 && (
             <div className="flex items-center justify-between">
-              <div className="text-sm text-gray-500">
-                显示 {((data.page - 1) * data.pageSize) + 1} - {Math.min(data.page * data.pageSize, data.total)} 条，
-                共 {data.total} 条记录
+              <div className="text-gray-500 text-sm">
+                显示 {(data.page - 1) * data.pageSize + 1} -{' '}
+                {Math.min(data.page * data.pageSize, data.total)} 条， 共 {data.total} 条记录
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
@@ -300,26 +308,26 @@ export function UserList() {
                   <ChevronLeft className="h-4 w-4" />
                   上一页
                 </Button>
-                
+
                 <div className="flex items-center gap-1">
                   {Array.from({ length: Math.min(5, data.totalPages) }).map((_, i) => {
                     const pageNum = data.page - 2 + i;
                     if (pageNum < 1 || pageNum > data.totalPages) return null;
-                    
+
                     return (
                       <Button
                         key={`page-${pageNum}`}
-                        variant={pageNum === data.page ? "default" : "outline"}
+                        variant={pageNum === data.page ? 'default' : 'outline'}
                         size="sm"
                         onClick={() => handlePageChange(pageNum)}
-                        className="w-8 h-8 p-0"
+                        className="h-8 w-8 p-0"
                       >
                         {pageNum}
                       </Button>
                     );
                   })}
                 </div>
-                
+
                 <Button
                   variant="outline"
                   size="sm"
@@ -336,4 +344,4 @@ export function UserList() {
       </CardContent>
     </Card>
   );
-} 
+}

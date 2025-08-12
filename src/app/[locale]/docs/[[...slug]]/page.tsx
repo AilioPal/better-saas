@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation';
 
 // staic generate
 export const dynamic = 'force-static';
-export const revalidate = 3600; // 1 hour 
+export const revalidate = 3600; // 1 hour
 
 interface Props {
   params: Promise<{
@@ -14,8 +14,6 @@ interface Props {
     slug?: string[];
   }>;
 }
-
-
 
 export default async function Page({ params }: Props) {
   const { locale, slug } = await params;

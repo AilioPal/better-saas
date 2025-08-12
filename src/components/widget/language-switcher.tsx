@@ -7,11 +7,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useEnabledLanguages } from '@/hooks/use-config';
 import { usePathname } from '@/i18n/navigation';
 import { Globe } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useEnabledLanguages } from '@/hooks/use-config';
 
 interface EnabledLanguage {
   locale: string;
@@ -65,7 +65,7 @@ export function LanguageSwitcher() {
             className={locale === lang.locale ? 'bg-accent' : ''}
           >
             {lang.nativeName}
-          </DropdownMenuItem>   
+          </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>

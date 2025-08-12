@@ -1,15 +1,22 @@
-import { useMemo } from 'react';
-import { useLocale } from 'next-intl';
-import { appConfig, featuresConfig, i18nConfig, themeConfig, paymentConfig, navbarConfig } from '@/config';
+import {
+  appConfig,
+  featuresConfig,
+  i18nConfig,
+  navbarConfig,
+  paymentConfig,
+  themeConfig,
+} from '@/config';
 import type {
   AppConfig,
   FeaturesConfig,
   I18nConfig,
-  ThemeConfig,
+  NavbarConfig,
   PaymentConfig,
   PaymentPlan,
-  NavbarConfig,
+  ThemeConfig,
 } from '@/types';
+import { useLocale } from 'next-intl';
+import { useMemo } from 'react';
 
 /**
  * Hook to access application configuration

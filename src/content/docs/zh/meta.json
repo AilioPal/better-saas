@@ -2,7 +2,7 @@
   "title": "文档",
   "pages": [
     "index",
-    "quickstart", 
+    "quickstart",
     "architecture",
     "deployment",
     "development",

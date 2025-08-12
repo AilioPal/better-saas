@@ -34,12 +34,12 @@ services:
     ports:
       - "2999:2999"
       - "9229:9229"
+    env_file:
+      - .env
     environment:
       NODE_ENV: development
+      # Override DATABASE_URL to use local postgres container
       DATABASE_URL: postgresql://${DATABASE_USER:-postgres}:${DATABASE_PASSWORD:-postgres}@postgres:5432/${DATABASE_NAME:-better_saas}
-      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:2999}
-      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
-      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:2999}
     volumes:
       - .:/app
       - /app/node_modules
@@ -59,14 +59,35 @@ services:
       dockerfile: ./infra/docker/better-saas/Dockerfile.prod
     container_name: better-saas-app-prod
     restart: unless-stopped
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
+    env_file:
+      - .env
     environment:
       NODE_ENV: production
-      DATABASE_URL: ${DATABASE_URL}  # External managed database URL
-      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
-      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
-      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      # Override the app URL for production
+      NEXT_PUBLIC_APP_URL: https://code.ailiopal.com
+    networks:
+      - better-saas-network
+    profiles:
+      - prod
+
+  # Caddy Web Server (Production only)
+  caddy:
+    build:
+      context: ./infra/docker/caddy
+      dockerfile: Dockerfile
+    container_name: better-saas-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"  # HTTP/3 support
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app-prod
     networks:
       - better-saas-network
     profiles:
@@ -81,12 +102,10 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
+    env_file:
+      - .env
     environment:
       NODE_ENV: production
-      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/better_saas}
-      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
-      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
-      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
     networks:
       - better-saas-network
     profiles:
@@ -98,4 +117,8 @@ networks:
 
 volumes:
   postgres_data:
+    driver: local
+  caddy_data:
+    driver: local
+  caddy_config:
     driver: local

@@ -1,13 +1,13 @@
 'use client';
 
 import { AdminGuard } from '@/components/admin-guard';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { UserList } from '@/components/dashboard/user-list';
-import { getUserStats, type UserStats } from '@/server/actions/user-actions';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { type UserStats, getUserStats } from '@/server/actions/user-actions';
+import { CreditCard, UserCheck, UserPlus, Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { Users, UserCheck, UserPlus, CreditCard } from 'lucide-react';
 
 export default function UsersPage() {
   const t = useTranslations('sidebar');
@@ -51,7 +51,7 @@ export default function UsersPage() {
             <CardContent>
               {loading ? (
                 <div className="space-y-2">
-                  <div className='h-8 w-16 animate-pulse rounded bg-gray-200' />
+                  <div className="h-8 w-16 animate-pulse rounded bg-gray-200" />
                 </div>
               ) : (
                 <div className="font-bold text-2xl">{formatNumber(stats?.totalUsers || 0)}</div>
@@ -67,7 +67,7 @@ export default function UsersPage() {
             <CardContent>
               {loading ? (
                 <div className="space-y-2">
-                  <div className='h-8 w-16 animate-pulse rounded bg-gray-200' />
+                  <div className="h-8 w-16 animate-pulse rounded bg-gray-200" />
                 </div>
               ) : (
                 <div className="font-bold text-2xl">{formatNumber(stats?.activeUsers || 0)}</div>
@@ -83,7 +83,7 @@ export default function UsersPage() {
             <CardContent>
               {loading ? (
                 <div className="space-y-2">
-                  <div className='h-8 w-16 animate-pulse rounded bg-gray-200' />
+                  <div className="h-8 w-16 animate-pulse rounded bg-gray-200" />
                 </div>
               ) : (
                 <div className="font-bold text-2xl">{formatNumber(stats?.newUsers || 0)}</div>
@@ -100,7 +100,7 @@ export default function UsersPage() {
             <CardContent>
               {loading ? (
                 <div className="space-y-2">
-                  <div className='h-8 w-16 animate-pulse rounded bg-gray-200' />
+                  <div className="h-8 w-16 animate-pulse rounded bg-gray-200" />
                 </div>
               ) : (
                 <div className="font-bold text-2xl">{formatNumber(stats?.paidUsers || 0)}</div>

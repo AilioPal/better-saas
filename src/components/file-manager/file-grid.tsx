@@ -13,10 +13,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 import type { FileInfo } from '@/lib/files/file-service';
 import { cn } from '@/lib/utils';
 import { Download, Eye, MoreHorizontal, Trash2 } from 'lucide-react';
-import Image from 'next/image';
-import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useLocale } from 'next-intl';
+import Image from 'next/image';
+import { useState } from 'react';
 
 interface FileGridProps {
   files: FileInfo[];
@@ -157,7 +157,9 @@ export function FileGrid({
                       </Badge>
                     )}
                   </div>
-                  <p className="mt-1 text-muted-foreground text-xs">{formatDate(file.createdAt, locale)}</p>
+                  <p className="mt-1 text-muted-foreground text-xs">
+                    {formatDate(file.createdAt, locale)}
+                  </p>
                 </div>
 
                 {/* Action menu */}

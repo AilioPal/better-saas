@@ -1,15 +1,11 @@
 'use client';
 
+import { useIsAdmin } from '@/components/auth/permission-provider';
 import { LoadingSkeleton } from '@/components/loading-skeleton';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
-  useAuthLoading,
-  useIsAuthenticated,
-  useAuthInitialized
-} from '@/store/auth-store';
-import { useIsAdmin } from '@/components/auth/permission-provider';
-import { Shield, ArrowLeft } from 'lucide-react';
+import { useAuthInitialized, useAuthLoading, useIsAuthenticated } from '@/store/auth-store';
+import { ArrowLeft, Shield } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -73,19 +69,11 @@ export function AdminGuard({
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Button
-              onClick={() => router.push(redirectTo)}
-              className="w-full"
-              variant="default"
-            >
+            <Button onClick={() => router.push(redirectTo)} className="w-full" variant="default">
               <ArrowLeft className="mr-2 h-4 w-4" />
               返回设置
             </Button>
-            <Button
-              onClick={() => router.push('/')}
-              className="w-full"
-              variant="outline"
-            >
+            <Button onClick={() => router.push('/')} className="w-full" variant="outline">
               返回首页
             </Button>
           </CardContent>
@@ -95,4 +83,4 @@ export function AdminGuard({
   }
 
   return <>{children}</>;
-} 
+}

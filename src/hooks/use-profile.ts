@@ -1,7 +1,7 @@
-import { useUser, useUpdateUser, useAuthLoading } from '@/store/auth-store';
-import type { ProfileFormData, UseProfileReturn } from '@/types/profile';
 import { uploadAvatarAction } from '@/server/actions/upload-avatar';
-import { useState, useEffect } from 'react';
+import { useAuthLoading, useUpdateUser, useUser } from '@/store/auth-store';
+import type { ProfileFormData, UseProfileReturn } from '@/types/profile';
+import { useEffect, useState } from 'react';
 import { useToastMessages } from './use-toast-messages';
 
 export function useProfile(): UseProfileReturn {

@@ -16,10 +16,12 @@ export const appConfigSchema = z.object({
     }),
     description: z.string().min(1, 'Metadata description is required'),
     keywords: z.array(z.string()).min(1, 'At least one keyword is required'),
-    authors: z.array(z.object({
-      name: z.string().min(1, 'Author name is required'),
-      url: z.string().url().optional(),
-    })),
+    authors: z.array(
+      z.object({
+        name: z.string().min(1, 'Author name is required'),
+        url: z.string().url().optional(),
+      })
+    ),
     creator: z.string().min(1, 'Creator is required'),
     robots: z.object({
       index: z.boolean(),
@@ -126,32 +128,43 @@ export const featuresConfigSchema = z.object({
 
 // I18n configuration schema
 export const i18nConfigSchema = z.object({
-  locales: z.array(z.string().min(1, 'Locale cannot be empty')).min(1, 'At least one locale is required'),
+  locales: z
+    .array(z.string().min(1, 'Locale cannot be empty'))
+    .min(1, 'At least one locale is required'),
   defaultLocale: z.string().min(1, 'Default locale is required'),
   fallbackLocale: z.string().min(1, 'Fallback locale is required'),
-  languages: z.record(z.string(), z.object({
-    name: z.string().min(1, 'Language name is required'),
-    nativeName: z.string().min(1, 'Native name is required'),
-    flag: z.string().min(1, 'Flag is required'),
-    dir: z.enum(['ltr', 'rtl']),
-    enabled: z.boolean(),
-  })),
+  languages: z.record(
+    z.string(),
+    z.object({
+      name: z.string().min(1, 'Language name is required'),
+      nativeName: z.string().min(1, 'Native name is required'),
+      flag: z.string().min(1, 'Flag is required'),
+      dir: z.enum(['ltr', 'rtl']),
+      enabled: z.boolean(),
+    })
+  ),
   routing: z.object({
     localePrefix: z.enum(['always', 'as-needed', 'never']),
     localeDetection: z.boolean(),
     domains: z.record(z.string(), z.string()).optional(),
   }),
   namespaces: z.array(z.string().min(1, 'Namespace cannot be empty')),
-  dateTimeFormats: z.record(z.string(), z.object({
-    short: z.record(z.string(), z.union([z.string(), z.number()])),
-    medium: z.record(z.string(), z.union([z.string(), z.number()])),
-    long: z.record(z.string(), z.union([z.string(), z.number()])),
-  })),
-  numberFormats: z.record(z.string(), z.object({
-    currency: z.record(z.string(), z.union([z.string(), z.number()])),
-    decimal: z.record(z.string(), z.union([z.string(), z.number()])),
-    percent: z.record(z.string(), z.union([z.string(), z.number()])),
-  })),
+  dateTimeFormats: z.record(
+    z.string(),
+    z.object({
+      short: z.record(z.string(), z.union([z.string(), z.number()])),
+      medium: z.record(z.string(), z.union([z.string(), z.number()])),
+      long: z.record(z.string(), z.union([z.string(), z.number()])),
+    })
+  ),
+  numberFormats: z.record(
+    z.string(),
+    z.object({
+      currency: z.record(z.string(), z.union([z.string(), z.number()])),
+      decimal: z.record(z.string(), z.union([z.string(), z.number()])),
+      percent: z.record(z.string(), z.union([z.string(), z.number()])),
+    })
+  ),
 });
 
 // Theme configuration schema
@@ -184,23 +197,27 @@ export const paymentConfigSchema = z.object({
     webhookSecret: z.string().min(1, 'Stripe webhook secret is required'),
     apiVersion: z.string().min(1, 'Stripe API version is required'),
   }),
-  plans: z.array(z.object({
-    id: z.string().min(1, 'Plan ID is required'),
-    name: z.string().min(1, 'Plan name is required'),
-    description: z.string().min(1, 'Plan description is required'),
-    price: z.number().nonnegative('Plan price must be non-negative'),
-    interval: z.enum(['month', 'year']).nullable(),
-    stripePriceId: z.string().optional(),
-    features: z.array(z.string().min(1, 'Feature cannot be empty')),
-    popular: z.boolean().optional(),
-    metadata: z.record(z.string(), z.string()).optional(),
-    limits: z.object({
-      storage: z.number().optional(),
-      users: z.number().optional(),
-      projects: z.number().optional(),
-      apiCalls: z.number().optional(),
-    }).optional(),
-  })),
+  plans: z.array(
+    z.object({
+      id: z.string().min(1, 'Plan ID is required'),
+      name: z.string().min(1, 'Plan name is required'),
+      description: z.string().min(1, 'Plan description is required'),
+      price: z.number().nonnegative('Plan price must be non-negative'),
+      interval: z.enum(['month', 'year']).nullable(),
+      stripePriceId: z.string().optional(),
+      features: z.array(z.string().min(1, 'Feature cannot be empty')),
+      popular: z.boolean().optional(),
+      metadata: z.record(z.string(), z.string()).optional(),
+      limits: z
+        .object({
+          storage: z.number().optional(),
+          users: z.number().optional(),
+          projects: z.number().optional(),
+          apiCalls: z.number().optional(),
+        })
+        .optional(),
+    })
+  ),
   trial: z.object({
     enabled: z.boolean(),
     days: z.number().positive('Trial days must be positive'),
@@ -231,10 +248,10 @@ export function validateConfig<T>(config: T, schema: z.ZodSchema<T>, configName:
     return schema.parse(config);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const errorMessages = error.errors.map(err => 
-        `${err.path.join('.')}: ${err.message}`
-      ).join('\n');
-      
+      const errorMessages = error.errors
+        .map((err) => `${err.path.join('.')}: ${err.message}`)
+        .join('\n');
+
       throw new Error(`Configuration validation failed for ${configName}:\n${errorMessages}`);
     }
     throw error;
@@ -279,12 +296,16 @@ function validateCrossReferences(configs: {
 }) {
   // Check if default locale exists in languages
   if (!configs.i18n.languages[configs.i18n.defaultLocale]) {
-    throw new Error(`Default locale '${configs.i18n.defaultLocale}' not found in languages configuration`);
+    throw new Error(
+      `Default locale '${configs.i18n.defaultLocale}' not found in languages configuration`
+    );
   }
 
   // Check if fallback locale exists in languages
   if (!configs.i18n.languages[configs.i18n.fallbackLocale]) {
-    throw new Error(`Fallback locale '${configs.i18n.fallbackLocale}' not found in languages configuration`);
+    throw new Error(
+      `Fallback locale '${configs.i18n.fallbackLocale}' not found in languages configuration`
+    );
   }
 
   // Check if default theme exists in themes
@@ -294,7 +315,7 @@ function validateCrossReferences(configs: {
 
   // Check if payment trial plans exist
   if (configs.payment.trial.enabled) {
-    const planIds = configs.payment.plans.map(plan => plan.id);
+    const planIds = configs.payment.plans.map((plan) => plan.id);
     for (const trialPlanId of configs.payment.trial.plans) {
       if (!planIds.includes(trialPlanId)) {
         throw new Error(`Trial plan '${trialPlanId}' not found in payment plans`);
@@ -304,11 +325,13 @@ function validateCrossReferences(configs: {
 
   // Check if payment is enabled but no plans have stripe price IDs
   if (configs.features.payment.enabled) {
-    const paidPlans = configs.payment.plans.filter(plan => plan.price > 0);
+    const paidPlans = configs.payment.plans.filter((plan) => plan.price > 0);
     if (paidPlans.length > 0) {
-      const missingPriceIds = paidPlans.filter(plan => !plan.stripePriceId);
+      const missingPriceIds = paidPlans.filter((plan) => !plan.stripePriceId);
       if (missingPriceIds.length > 0) {
-        console.warn(`Warning: Paid plans missing Stripe price IDs: ${missingPriceIds.map(p => p.id).join(', ')}`);
+        console.warn(
+          `Warning: Paid plans missing Stripe price IDs: ${missingPriceIds.map((p) => p.id).join(', ')}`
+        );
       }
     }
   }
@@ -316,27 +339,20 @@ function validateCrossReferences(configs: {
 
 // Environment-specific validation
 export function validateEnvironmentConfig() {
-  const requiredEnvVars = [
-    'NEXT_PUBLIC_APP_URL',
-    'DATABASE_URL',
-    'BETTER_AUTH_SECRET',
-  ];
+  const requiredEnvVars = ['NEXT_PUBLIC_APP_URL', 'DATABASE_URL', 'BETTER_AUTH_SECRET'];
 
-  const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
-  
+  const missingVars = requiredEnvVars.filter((varName) => !process.env[varName]);
+
   if (missingVars.length > 0) {
     throw new Error(`Missing required environment variables: ${missingVars.join(', ')}`);
   }
 
   // Validate payment-specific env vars if payment is enabled
   if (process.env.STRIPE_SECRET_KEY) {
-    const stripeVars = [
-      'STRIPE_SECRET_KEY',
-      'STRIPE_WEBHOOK_SECRET',
-    ];
-    
-    const missingStripeVars = stripeVars.filter(varName => !process.env[varName]);
-    
+    const stripeVars = ['STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET'];
+
+    const missingStripeVars = stripeVars.filter((varName) => !process.env[varName]);
+
     if (missingStripeVars.length > 0) {
       throw new Error(`Missing Stripe environment variables: ${missingStripeVars.join(', ')}`);
     }
@@ -359,4 +375,4 @@ export function devConfigCheck() {
   if (process.env.NODE_ENV === 'development') {
     configHealthCheck();
   }
-} 
+}

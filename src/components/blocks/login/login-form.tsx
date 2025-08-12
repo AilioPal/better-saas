@@ -5,11 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
-import { useTranslations } from 'next-intl';
 import type { LoginFormProps } from '@/types/login';
+import { useTranslations } from 'next-intl';
 
-export function LoginForm({ 
-  className, 
+export function LoginForm({
+  className,
   formData,
   setFormData,
   isLoading,
@@ -17,7 +17,7 @@ export function LoginForm({
   onEmailLogin,
   onSocialLogin,
   onClearError,
-  ...props 
+  ...props
 }: LoginFormProps & React.ComponentProps<'div'>) {
   const t = useTranslations('auth');
 
@@ -53,7 +53,7 @@ export function LoginForm({
                 </div>
               )}
 
-                              {/* Social login buttons */}
+              {/* Social login buttons */}
               <div className="flex flex-col gap-4">
                 <Button
                   type="button"
@@ -111,7 +111,7 @@ export function LoginForm({
                 </span>
               </div>
 
-                              {/* Email password login */}
+              {/* Email password login */}
               <div className="grid gap-6">
                 <div className="grid gap-3">
                   <Label htmlFor="email">{t('email')}</Label>
@@ -172,8 +172,8 @@ export function LoginForm({
         {t('termsAndPrivacy.prefix')}{' '}
         <a href="/terms" className="underline underline-offset-4 hover:text-primary">
           {t('termsOfService')}
-        </a>
-        {' '}{t('termsAndPrivacy.middle')}{' '}
+        </a>{' '}
+        {t('termsAndPrivacy.middle')}{' '}
         <a href="/privacy" className="underline underline-offset-4 hover:text-primary">
           {t('privacyPolicy')}
         </a>

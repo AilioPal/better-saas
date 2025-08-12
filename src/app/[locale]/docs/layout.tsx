@@ -1,10 +1,10 @@
+import { i18nConfig } from '@/config/i18n.config';
 import { locales } from '@/i18n/routing';
 import { buildDocsTree } from '@/lib/fumadocs/docs';
 import { DocsLayout } from 'fumadocs-ui/layouts/docs';
 import { RootProvider } from 'fumadocs-ui/provider';
 import { getMessages } from 'next-intl/server';
 import type { ReactNode } from 'react';
-import { i18nConfig } from '@/config/i18n.config';
 
 type Props = {
   children: ReactNode;
@@ -37,20 +37,20 @@ export default async function Layout({ children, params }: Props) {
           type: 'folder',
           name: item.name,
           defaultOpen: item.defaultOpen,
-          children: item.children ? convertTreeItems(item.children) : []
+          children: item.children ? convertTreeItems(item.children) : [],
         };
       }
       return {
         type: 'page',
         name: item.name,
-        url: getLocalizedUrl(item.url || '')
+        url: getLocalizedUrl(item.url || ''),
       };
     });
   };
 
   const tree = {
     name: 'Documentation',
-    children: convertTreeItems(treeItems)
+    children: convertTreeItems(treeItems),
   };
 
   const navUrl = getLocalizedUrl('/docs');

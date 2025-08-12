@@ -1,6 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,7 +10,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { CreditCard, AlertTriangle } from 'lucide-react';
+import { AlertTriangle, CreditCard } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface PurchaseConfirmationDialogProps {
   isOpen: boolean;
@@ -41,33 +41,33 @@ export function PurchaseConfirmationDialog({
           <AlertDialogDescription asChild>
             <div className="space-y-3 text-left">
               <p>{t('description')}</p>
-              
-              <div className="bg-muted p-3 rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
+
+              <div className="rounded-lg bg-muted p-3">
+                <div className="mb-2 flex items-center gap-2">
                   <AlertTriangle className="h-4 w-4 text-amber-500" />
                   <span className="font-medium text-amber-700 dark:text-amber-300">
                     {t('warning')}
                   </span>
                 </div>
-                <p className="font-mono text-sm bg-background p-2 rounded border">
+                <p className="rounded border bg-background p-2 font-mono text-sm">
                   {t('testCardNumber')}
                 </p>
               </div>
-              
+
               {planName && (
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   {t('purchaseInfo', { planName: planName })}
                 </p>
               )}
             </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
-        
+
         <AlertDialogFooter>
           <AlertDialogCancel onClick={onClose} disabled={isProcessing}>
             {t('cancelButton')}
           </AlertDialogCancel>
-          <AlertDialogAction 
+          <AlertDialogAction
             onClick={onConfirm}
             disabled={isProcessing}
             className="bg-primary hover:bg-primary/90"
@@ -85,4 +85,4 @@ export function PurchaseConfirmationDialog({
       </AlertDialogContent>
     </AlertDialog>
   );
-} 
+}

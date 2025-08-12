@@ -1,5 +1,4 @@
-import type { FeaturesConfig } from "@/types";
-
+import type { FeaturesConfig } from '@/types';
 
 export const featuresConfig: FeaturesConfig = {
   // Authentication features
@@ -35,7 +34,7 @@ export const featuresConfig: FeaturesConfig = {
     thumbnails: true,
     imageProcessing: true,
     maxFileSize: 10 * 1024 * 1024, // 10MB
-    allowedTypes: ['image/jpeg', 'image/png','image/gif'], // 支持 JPEG,GIF和PNG 格式
+    allowedTypes: ['image/jpeg', 'image/png', 'image/gif'], // 支持 JPEG,GIF和PNG 格式
   },
 
   // Blog features
@@ -89,4 +88,4 @@ export const featuresConfig: FeaturesConfig = {
     systemSettings: true,
     analytics: true,
   },
-}; 
+};

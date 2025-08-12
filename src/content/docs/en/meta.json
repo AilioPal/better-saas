@@ -2,7 +2,7 @@
   "title": "Documentation",
   "pages": [
     "index",
-    "quickstart", 
+    "quickstart",
     "architecture",
     "deployment",
     "development",

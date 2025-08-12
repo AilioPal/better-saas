@@ -1,21 +1,21 @@
 'use client';
 
 import { ArrowRight, CircleCheck } from 'lucide-react';
-import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
+import { PurchaseConfirmationDialog } from '@/components/payment/purchase-confirmation-dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
-import { useIsAuthenticated } from '@/store/auth-store';
-import { useRouter } from '@/i18n/navigation';
-import { createCheckoutSession } from '@/server/actions/payment/create-subscription';
-import { toast } from 'sonner';
-import { useTransition } from 'react';
-import { ErrorLogger } from '@/lib/logger/logger-utils';
 import { usePaymentPlans } from '@/hooks/use-config';
-import { PurchaseConfirmationDialog } from '@/components/payment/purchase-confirmation-dialog';
+import { useRouter } from '@/i18n/navigation';
+import { ErrorLogger } from '@/lib/logger/logger-utils';
+import { createCheckoutSession } from '@/server/actions/payment/create-subscription';
+import { useIsAuthenticated } from '@/store/auth-store';
+import { useTransition } from 'react';
+import { toast } from 'sonner';
 
 const pricingErrorLogger = new ErrorLogger('pricing');
 
@@ -47,11 +47,7 @@ interface Pricing2Props {
   plans?: PricingPlan[];
 }
 
-const Pricing = ({
-  heading,
-  description,
-  plans,
-}: Pricing2Props) => {
+const Pricing = ({ heading, description, plans }: Pricing2Props) => {
   const t = useTranslations('pricing');
 
   // 使用i18n翻译或传入的props
@@ -64,25 +60,26 @@ const Pricing = ({
   const isAuthenticated = useIsAuthenticated();
   const router = useRouter();
   const paymentPlans = usePaymentPlans();
-  
+
   // Use configured plans if not provided as props
   // Convert payment plans to pricing plans format if needed
-  const pricingPlans = plans || paymentPlans.map((plan) => ({
-    ...plan,
-    monthlyPrice: plan.price === 0 ? 'Free' : `$${plan.price}`,
-    yearlyPrice: plan.price === 0 ? 'Free' : `$${Math.round((plan.yearlyPrice || plan.price * 10) / 12)}`,
-    yearlyTotal: plan.price === 0 ? 0 : (plan.yearlyPrice || plan.price * 10),
-    features: plan.features.map((feature: string) => ({ text: feature })),
-    stripePriceIds: plan.stripePriceIds || {
-      monthly: plan.stripePriceId,
-      yearly: plan.stripePriceId,
-    },
-    button: {
-      text: plan.price === 0
-        ? t('getStartedText')
-        : t('purchaseText'),
-    },
-  }));
+  const pricingPlans =
+    plans ||
+    paymentPlans.map((plan) => ({
+      ...plan,
+      monthlyPrice: plan.price === 0 ? 'Free' : `$${plan.price}`,
+      yearlyPrice:
+        plan.price === 0 ? 'Free' : `$${Math.round((plan.yearlyPrice || plan.price * 10) / 12)}`,
+      yearlyTotal: plan.price === 0 ? 0 : plan.yearlyPrice || plan.price * 10,
+      features: plan.features.map((feature: string) => ({ text: feature })),
+      stripePriceIds: plan.stripePriceIds || {
+        monthly: plan.stripePriceId,
+        yearly: plan.stripePriceId,
+      },
+      button: {
+        text: plan.price === 0 ? t('getStartedText') : t('purchaseText'),
+      },
+    }));
 
   const handlePurchaseClick = (plan: PricingPlan) => {
     if (!isAuthenticated) {
@@ -106,8 +103,8 @@ const Pricing = ({
     if (!selectedPlan) return;
 
     // Get corresponding price ID
-    const priceId = isYearly 
-      ? selectedPlan.stripePriceIds?.yearly 
+    const priceId = isYearly
+      ? selectedPlan.stripePriceIds?.yearly
       : selectedPlan.stripePriceIds?.monthly;
 
     if (!priceId) {
@@ -199,8 +196,8 @@ const Pricing = ({
                   </ul>
                 </CardContent>
                 <CardFooter className="mt-auto">
-                  <Button 
-                    className="w-full" 
+                  <Button
+                    className="w-full"
                     onClick={() => handlePurchaseClick(plan)}
                     disabled={isPending}
                   >

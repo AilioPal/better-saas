@@ -13,11 +13,11 @@ export const navbarConfig: NavbarConfig = {
   auth: {
     login: {
       text: 'auth.login', // i18n key
-      url: '/login'
+      url: '/login',
     },
     signup: {
       text: 'auth.signup', // i18n key
-      url: '/signup'
+      url: '/signup',
     },
   },
 
@@ -26,7 +26,7 @@ export const navbarConfig: NavbarConfig = {
     items: [
       {
         title: 'menu.blog', // i18n key
-        url: '/blog' // Will be prefixed with locale in hook
+        url: '/blog', // Will be prefixed with locale in hook
       },
       {
         title: 'menu.document', // i18n key

@@ -1,11 +1,11 @@
 'use server';
 
 import { auth } from '@/lib/auth/auth';
-import { StripeProvider } from '@/payment/stripe/provider';
-import { paymentRepository } from '@/server/db/repositories/payment-repository';
-import type { ActionResult } from '@/payment/types';
-import { headers } from 'next/headers';
 import { ErrorLogger } from '@/lib/logger/logger-utils';
+import { StripeProvider } from '@/payment/stripe/provider';
+import type { ActionResult } from '@/payment/types';
+import { paymentRepository } from '@/server/db/repositories/payment-repository';
+import { headers } from 'next/headers';
 
 const cancelErrorLogger = new ErrorLogger('cancel-subscription');
 
@@ -13,7 +13,7 @@ export async function cancelSubscription(
   subscriptionId: string
 ): Promise<ActionResult<{ canceled: boolean }>> {
   let session: { user?: { id: string } } | null = null;
-  
+
   try {
     session = await auth.api.getSession({
       headers: await headers(),
@@ -68,7 +68,6 @@ export async function cancelSubscription(
       },
       message: '订阅已设置为在当前周期结束后取消',
     };
-
   } catch (error) {
     cancelErrorLogger.logError(error as Error, {
       operation: 'cancelSubscription',
@@ -80,4 +79,4 @@ export async function cancelSubscription(
       error: error instanceof Error ? error.message : '取消订阅失败',
     };
   }
-} 
+}

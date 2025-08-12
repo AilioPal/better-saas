@@ -3,7 +3,7 @@ import { getLocale } from 'next-intl/server';
 // Multi-language support for error messages in Server Actions
 export async function getErrorMessage(key: string): Promise<string> {
   const locale = await getLocale();
-  
+
   const messages = {
     zh: {
       unauthorizedAccess: '未授权访问',
@@ -37,4 +37,4 @@ export async function getErrorMessage(key: string): Promise<string> {
 
   const localeMessages = messages[locale as keyof typeof messages] || messages.en;
   return localeMessages[key as keyof typeof localeMessages] || key;
-} 
+}

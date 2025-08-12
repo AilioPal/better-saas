@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { useTranslations, useMessages } from 'next-intl';
+import { useMessages, useTranslations } from 'next-intl';
 
 interface TranslationFaqItem {
   question: string;
@@ -18,8 +18,6 @@ interface FaqItem {
   question: string;
   answer: string;
 }
-
-
 
 const Faq = () => {
   const faqData = useTranslations('faq');
@@ -35,10 +33,12 @@ const Faq = () => {
 
   // Get FAQ items from i18n
   const faqMessages = messages as { faq?: { items?: TranslationFaqItem[] } };
-  const items: FaqItem[] = (faqMessages?.faq?.items || []).map((item: TranslationFaqItem, index: number) => ({
-    ...item,
-    id: `faq-${index + 1}`,
-  }));
+  const items: FaqItem[] = (faqMessages?.faq?.items || []).map(
+    (item: TranslationFaqItem, index: number) => ({
+      ...item,
+      id: `faq-${index + 1}`,
+    })
+  );
   return (
     <section className="py-16">
       <div className="container space-y-16">

@@ -20,10 +20,10 @@ import {
 import type { FileInfo } from '@/lib/files/file-service';
 import { cn } from '@/lib/utils';
 import { Download, Eye, MoreHorizontal, Trash2 } from 'lucide-react';
-import Image from 'next/image';
-import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useLocale } from 'next-intl';
+import Image from 'next/image';
+import { useState } from 'react';
 
 interface FileTableProps {
   files: FileInfo[];
@@ -180,10 +180,14 @@ export function FileTable({
                 <span className="text-muted-foreground text-sm">{formatFileSize(file.size)}</span>
               </TableCell>
               <TableCell>
-                <span className="text-muted-foreground text-sm">{file.uploadUserEmail || file.uploadUserId}</span>
+                <span className="text-muted-foreground text-sm">
+                  {file.uploadUserEmail || file.uploadUserId}
+                </span>
               </TableCell>
               <TableCell>
-                <span className="text-muted-foreground text-sm">{formatDate(file.createdAt, locale)}</span>
+                <span className="text-muted-foreground text-sm">
+                  {formatDate(file.createdAt, locale)}
+                </span>
               </TableCell>
               <TableCell>
                 <DropdownMenu>

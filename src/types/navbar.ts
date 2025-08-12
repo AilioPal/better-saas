@@ -52,4 +52,4 @@ export interface UseNavbarReturn {
   isLoading: boolean;
   isInitialized: boolean;
   handlePricingClick: () => void;
-} 
+}

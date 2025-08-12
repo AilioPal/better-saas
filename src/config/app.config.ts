@@ -1,4 +1,4 @@
-import type { AppConfig } from "@/types";
+import type { AppConfig } from '@/types';
 
 export const appConfig: AppConfig = {
   // Application basic information
@@ -16,7 +16,8 @@ export const appConfig: AppConfig = {
       default: 'Better-SaaS',
       template: '%s | Better-SaaS',
     },
-    description: 'A modern, full-stack SaaS application built with Next.js 15, featuring authentication, payments, file management, and internationalization.',
+    description:
+      'A modern, full-stack SaaS application built with Next.js 15, featuring authentication, payments, file management, and internationalization.',
     keywords: ['SaaS', 'Next.js', 'React', 'TypeScript', 'Authentication', 'Payments', 'Stripe'],
     authors: [{ name: 'Better-SaaS Team' }],
     creator: 'Better-SaaS Team',
@@ -38,13 +39,16 @@ export const appConfig: AppConfig = {
 
   // Administrator configuration
   admin: {
-    emails: process.env.ADMIN_EMAILS?.split(',').map(email => email.trim()).filter(Boolean) || [],
+    emails:
+      process.env.ADMIN_EMAILS?.split(',')
+        .map((email) => email.trim())
+        .filter(Boolean) || [],
   },
 
   // File upload configuration
   upload: {
     maxFileSize: 10 * 1024 * 1024, // 10MB
-    allowedTypes: ['image/jpeg', 'image/png','image/gif'], // 支持JPEG,PNG和GIF格式
+    allowedTypes: ['image/jpeg', 'image/png', 'image/gif'], // 支持JPEG,PNG和GIF格式
     maxFiles: 5,
   },
 
@@ -53,4 +57,4 @@ export const appConfig: AppConfig = {
     defaultPageSize: 10,
     maxPageSize: 100,
   },
-}; 
+};

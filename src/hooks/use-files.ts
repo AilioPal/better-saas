@@ -1,15 +1,15 @@
 'use client';
 
 import type { FileInfo } from '@/lib/files/file-service';
-import { 
-  uploadFileAction, 
-  deleteFileAction, 
+import { ErrorLogger } from '@/lib/logger/logger-utils';
+import {
+  type FileListResponse,
+  deleteFileAction,
   getFileListAction,
-  type FileListResponse 
+  uploadFileAction,
 } from '@/server/actions/file-actions';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
-import { ErrorLogger } from '@/lib/logger/logger-utils';
 
 const filesErrorLogger = new ErrorLogger('use-files');
 

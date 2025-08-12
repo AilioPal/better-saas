@@ -15,20 +15,20 @@
   ],
   "assets": {
     "directory": ".open-next/assets",
-    "binding": "STATIC_ASSETS",
+    "binding": "STATIC_ASSETS"
   },
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
       // The service should match the "name" of your worker
-      "service": "better-saas",
-    },
+      "service": "better-saas"
+    }
   ],
   "r2_buckets": [
     // Create a R2 binding with the binding name "NEXT_INC_CACHE_R2_BUCKET"
     {
       "binding": "NEXT_INC_CACHE_R2_BUCKET",
-      "bucket_name": "better-saas-cache-bucket",
-    },
-  ],
+      "bucket_name": "better-saas-cache-bucket"
+    }
+  ]
 }

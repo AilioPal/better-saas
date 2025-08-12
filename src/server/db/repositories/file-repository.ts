@@ -1,5 +1,5 @@
-import { and, desc, eq, ilike, sql } from 'drizzle-orm';
 import type { FileInfo } from '@/lib/files/file-service';
+import { and, desc, eq, ilike, sql } from 'drizzle-orm';
 import db from '../index';
 import { file, user } from '../schema';
 
@@ -48,7 +48,10 @@ export class FileRepository {
     return found ? this.toFileInfo(found) : null;
   }
 
-  async findByUserId(userId: string, options: FileListOptions = {}): Promise<{
+  async findByUserId(
+    userId: string,
+    options: FileListOptions = {}
+  ): Promise<{
     files: FileInfo[];
     total: number;
   }> {
@@ -56,7 +59,7 @@ export class FileRepository {
     const offset = (page - 1) * limit;
 
     const conditions = [eq(file.uploadUserId, userId)];
-    
+
     if (search) {
       conditions.push(ilike(file.originalName, `%${search}%`));
     }
@@ -128,10 +131,7 @@ export class FileRepository {
   }
 
   async delete(id: string): Promise<boolean> {
-    const [deleted] = await db
-      .delete(file)
-      .where(eq(file.id, id))
-      .returning();
+    const [deleted] = await db.delete(file).where(eq(file.id, id)).returning();
 
     return !!deleted;
   }
@@ -185,4 +185,4 @@ export class FileRepository {
   }
 }
 
-export const fileRepository = new FileRepository(); 
+export const fileRepository = new FileRepository();

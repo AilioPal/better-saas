@@ -61,8 +61,16 @@ const defaultSections = [
 ];
 
 const defaultSocialLinks = [
-  { icon: <IconBrandGithub strokeWidth={1} className="size-5" />, href: 'https://github.com/justnode/better-saas', label: 'Github' },
-  { icon: <IconBrandInstagram strokeWidth={1} className="size-5" />, href: '#', label: 'Instagram' },
+  {
+    icon: <IconBrandGithub strokeWidth={1} className="size-5" />,
+    href: 'https://github.com/justnode/better-saas',
+    label: 'Github',
+  },
+  {
+    icon: <IconBrandInstagram strokeWidth={1} className="size-5" />,
+    href: '#',
+    label: 'Instagram',
+  },
   { icon: <IconBrandTwitter strokeWidth={1} className="size-5" />, href: '#', label: 'Twitter' },
   { icon: <IconBrandLinkedin strokeWidth={1} className="size-5" />, href: '#', label: 'LinkedIn' },
 ];

@@ -1,5 +1,6 @@
 // Detect runtime environment
-const isCloudflareWorkers = typeof navigator !== 'undefined' && navigator.userAgent?.includes('Cloudflare-Workers');
+const isCloudflareWorkers =
+  typeof navigator !== 'undefined' && navigator.userAgent?.includes('Cloudflare-Workers');
 const isVercelEdge = typeof (globalThis as Record<string, unknown>).EdgeRuntime !== 'undefined';
 const isEdgeRuntime = isCloudflareWorkers || isVercelEdge;
 
@@ -21,14 +22,14 @@ function createEdgeLogger(prefix = ''): SimpleLogger {
     const logObj = typeof obj === 'object' ? obj : { message: obj };
     const message = msg || logObj.message || '';
     const fullMessage = prefix ? `[${prefix}] ${message}` : message;
-    
+
     const logData = {
       level,
       time: timestamp,
       ...logObj,
       msg: fullMessage,
     };
-    
+
     // 使用对应的 console 方法
     switch (level) {
       case 'error':
@@ -54,7 +55,12 @@ function createEdgeLogger(prefix = ''): SimpleLogger {
     debug: (obj, msg) => logWithPrefix('debug', obj, msg),
     trace: (obj, msg) => logWithPrefix('trace', obj, msg),
     fatal: (obj, msg) => logWithPrefix('fatal', obj, msg),
-    child: (obj) => createEdgeLogger(prefix ? `${prefix}:${(obj.service as string) || 'child'}` : (obj.service as string) || 'child'),
+    child: (obj) =>
+      createEdgeLogger(
+        prefix
+          ? `${prefix}:${(obj.service as string) || 'child'}`
+          : (obj.service as string) || 'child'
+      ),
   };
 }
 
@@ -68,8 +74,8 @@ async function initializeLogger(): Promise<SimpleLogger> {
   } else {
     // Use pino in Node.js environment with dynamic import
     const { default: pino } = await import('pino');
-    
-    return pino({
+
+    const pinoLogger = pino({
       level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
       ...(process.env.NODE_ENV === 'production' && {
         formatters: {
@@ -80,6 +86,8 @@ async function initializeLogger(): Promise<SimpleLogger> {
         timestamp: pino.stdTimeFunctions.isoTime,
       }),
     });
+
+    return pinoLogger as unknown as SimpleLogger;
   }
 }
 
@@ -93,50 +101,51 @@ const loggerProxy = new Proxy({} as SimpleLogger, {
       } else {
         // Return a function that logs after initialization
         return (...args: unknown[]) => {
-          initializeLogger().then(l => {
+          initializeLogger().then((l) => {
             logger = l;
             const method = l[prop as keyof SimpleLogger];
             if (typeof method === 'function') {
-              method.apply(l, args);
+              // Cast args to any[] to satisfy TypeScript
+              (method as Function).apply(l, args as any[]);
             }
           });
         };
       }
     }
-    
+
     return logger[prop as keyof SimpleLogger];
-  }
+  },
 });
 
 export const createChildLogger = (name: string) => {
   if (!logger && isEdgeRuntime) {
     logger = createEdgeLogger();
   }
-  
+
   if (!logger) {
     // Return a proxy that will initialize on first use
     return new Proxy({} as SimpleLogger, {
       get(target, prop) {
         return (...args: unknown[]) => {
-          initializeLogger().then(l => {
+          initializeLogger().then((l) => {
             logger = l;
             const child = l.child({ service: name });
             const method = child[prop as keyof SimpleLogger];
             if (typeof method === 'function') {
-              method.apply(child, args);
+              (method as Function).apply(child, args as any[]);
             }
           });
         };
-      }
+      },
     });
   }
-  
+
   return logger.child({ service: name });
 };
 
 // Initialize logger immediately if possible
 if (!isEdgeRuntime) {
-  initializeLogger().then(l => {
+  initializeLogger().then((l) => {
     logger = l;
   });
 }
